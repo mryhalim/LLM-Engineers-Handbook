@@ -117,6 +117,7 @@ Provide your response in JSON format.
             llm = ChatOpenAI(
                 model=settings.OPENAI_MODEL_ID,
                 api_key=settings.OPENAI_API_KEY,
+                base_url=settings.OPENAI_BASE_URL,
                 max_tokens=2000 if cls.dataset_type == DatasetType.PREFERENCE else 1200,
                 temperature=0.7,
             )
