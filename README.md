@@ -143,6 +143,13 @@ python --version  # Should show Python 3.11.x
 
 #### Option B: Using pyenv (recommended)
 
+> [!NOTE]
+> On Windows, [pyenv-win](https://github.com/pyenv-win/pyenv-win) is required instead of pyenv. This repository includes an [`install-pyenv-win.ps1`](install-pyenv-win.ps1) PowerShell script to install (or update) it for you:
+>
+> ```powershell
+> .\install-pyenv-win.ps1
+> ```
+
 1. Verify pyenv installation:
 
 ```bash
@@ -256,6 +263,15 @@ OPENAI_API_KEY=your_api_key_here
 ```
 
 → Check out this [tutorial](https://platform.openai.com/docs/quickstart) to learn how to provide one from OpenAI.
+
+> [!NOTE]
+> To use an OpenAI-compatible endpoint instead of `api.openai.com` (e.g. [OpenRouter](https://openrouter.ai/)), set the optional `OPENAI_BASE_URL` env var:
+>
+> ```env
+> OPENAI_BASE_URL=https://openrouter.ai/api/v1
+> ```
+>
+> It defaults to `None`, which keeps the standard OpenAI endpoint.
 
 #### Hugging Face
 

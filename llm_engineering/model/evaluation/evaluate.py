@@ -11,6 +11,9 @@ from tqdm.auto import tqdm
 from vllm import LLM, SamplingParams
 
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
+OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL") or None
+OPENAI_MODEL_ID = os.environ.get("OPENAI_MODEL_ID", "gpt-4o-mini")
+
 DATASET_HUGGINGFACE_WORKSPACE = os.environ["DATASET_HUGGINGFACE_WORKSPACE"]
 MODEL_HUGGINGFACE_WORKSPACE = os.environ["MODEL_HUGGINGFACE_WORKSPACE"]
 IS_DUMMY = os.environ.get("IS_DUMMY", False)
@@ -88,7 +91,7 @@ Provide your evaluation in JSON format with the following structure:
 """
 
     completion = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model=OPENAI_MODEL_ID,
         messages=[
             {
                 "role": "system",
@@ -106,7 +109,7 @@ Provide your evaluation in JSON format with the following structure:
 
 
 def evaluate_batch(batch, start_index):
-    client = OpenAI(api_key=OPENAI_API_KEY)
+    client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL)
     return [(i, evaluate_answer(instr, ans, client)) for i, (instr, ans) in enumerate(batch, start=start_index)]
 
 
