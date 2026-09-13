@@ -21,8 +21,19 @@ from . import utils as generation_utils
 from .output_parsers import ListPydanticOutputParser
 
 
+def _resolve_tokenizer(model_id: str) -> tiktoken.Encoding:
+    # Strip an OpenRouter-style "provider/" prefix (e.g. "openai/gpt-4o-mini") before
+    # asking tiktoken, which only knows raw OpenAI model names.
+    model_name = model_id.rsplit("/", 1)[-1]
+    try:
+        return tiktoken.encoding_for_model(model_name)
+    except KeyError:
+        logger.warning(f"Could not map model '{model_id}' to a tiktoken encoding. Falling back to 'o200k_base'.")
+        return tiktoken.get_encoding("o200k_base")
+
+
 class DatasetGenerator(ABC):
-    tokenizer = tiktoken.encoding_for_model(settings.OPENAI_MODEL_ID)
+    tokenizer = _resolve_tokenizer(settings.OPENAI_MODEL_ID)
     dataset_type: DatasetType | None = None
 
     system_prompt_template = """You are a helpful assistant who generates {dataset_format} based on the given context. \
