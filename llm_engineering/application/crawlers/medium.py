@@ -1,3 +1,5 @@
+import time
+
 from bs4 import BeautifulSoup
 from loguru import logger
 
@@ -22,6 +24,8 @@ class MediumCrawler(BaseSeleniumCrawler):
         logger.info(f"Starting scrapping Medium article: {link}")
 
         self.driver.get(link)
+        # Give Cloudflare's JS challenge time to resolve before scraping.
+        time.sleep(5)
         self.scroll_page()
 
         soup = BeautifulSoup(self.driver.page_source, "html.parser")
